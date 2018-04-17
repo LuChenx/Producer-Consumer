@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+	<!-- 用于自动注入,比如在类中使用了@Autowired -->
+	<context:annotation-config />
+
+	<!-- 自动扫描web包 ,将带有注解的类 纳入spring容器管理 -->
+	<context:component-scan base-package="com.migu.*">
+		<context:include-filter
+			type="annotation"
+			expression="org.aspectj.lang.annotation.Aspect" />
+	</context:component-scan>
+		
+	<context:property-placeholder location="classpath:remote.properties"  ignore-unresolvable="true" />
+	
+	<bean id="remoteconfig" name="remoteconfig" class="com.migu.util.model.RemoteConfig">
+		<property name="password" value="${usercenter_authorization_password}"/>
+		<property name="appid" value="${usercenter_authorization_appid}"/>
+		<property name="account" value="${usercenter_authorization_account}"/>
+		<property name="channelid" value="${channelid}"/>
+		<property name="appkey" value="${appkey}"/>
+		<property name="createuser_address" value="${usercenter_address_createuser}"/>
+		<property name="updateuser_address" value="${usercenter_address_updateuser}"/>
+		<property name="createPlayList_address" value="${createplaylist_address}"/>
+		<property name="oprPlayList_address" value="${oprplaylist_address}"/>
+		<property name="oprTag_address" value="${oprtag_address}"/>
+	</bean>
+	
+	<context:property-placeholder location="classpath:System.properties"  ignore-unresolvable="true" />
+	
+	<bean id="systemconfig" name="systemconfig" class="com.migu.util.model.SystemConfig">
+		<property name="userInfo_FilePath" value="${userinfo.file.path}"/>
+		<property name="userInfo_FileName" value="${userinfo.file.name}"/>
+		<property name="playlistInfo_FilePath" value="${playlistinfo.file.path}"/>
+		<property name="playlistInfo_FileName" value="${playlistinfo.file.name}"/>
+	</bean>
+	
+		<bean
+		class="com.migu.util.tools.SpringContextHolder"
+		lazy-init="false" />
+		
+</beans>
